@@ -10,6 +10,11 @@
 #  updated_at      :datetime         not null
 #
 class User < ApplicationRecord
+    validates :username, :session_token, presence: true, uniqueness: true
+    validates :password_digest, presence: true
+    validates :password, length: {minimum: 4, allow_nil: true}
+    before_validation :ensure_session_token
+    attr_reader :password
 
     def password=(password)
         self.password_digest = BCrypt::Password.create(password)
@@ -41,7 +46,7 @@ class User < ApplicationRecord
     private
 
     def generate_unique_session_token
-        loop do 
+        loop do
             session_token = SecureRandom::urlsafe_base64
             return session_token if User.find_by(session_token: session_token).nil?
         end
