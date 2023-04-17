@@ -1,7 +1,7 @@
 class CatsController < ApplicationController
 
   before_action :require_logged_in, only: [:new, :create]
-
+  before_action :owner_logged_in?, only: [:edit, :update]
   def index
     @cats = Cat.all
     render :index
@@ -41,6 +41,18 @@ class CatsController < ApplicationController
     else
       flash.now[:errors] = @cat.errors.full_messages
       render :edit
+    end
+  end
+
+  def owner_logged_in?
+    if current_user
+      if !@current_user.cats.where(id: params[:id]).nil?
+        return true
+      else
+        redirect_to cat_url(params[:id])
+      end
+    else
+      redirect_to new_session_url
     end
   end
 
