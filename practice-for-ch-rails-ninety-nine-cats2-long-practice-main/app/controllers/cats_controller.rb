@@ -1,7 +1,9 @@
 class CatsController < ApplicationController
 
   before_action :require_logged_in, only: [:new, :create]
-  before_action :owner_logged_in?, only: [:edit, :update]
+  before_action :owner_logged_in, only: [:edit, :update]
+
+  helper_method :owner_logged_in?
 
   def index
     @cats = Cat.all
@@ -45,7 +47,7 @@ class CatsController < ApplicationController
     end
   end
 
-  def owner_logged_in?
+  def owner_logged_in
     if current_user
       if !@current_user.cats.where(id: params[:id]).empty?
         return true
@@ -54,6 +56,18 @@ class CatsController < ApplicationController
       end
     else
       redirect_to new_session_url
+    end
+  end
+
+  def owner_logged_in?
+    if current_user
+      if !@current_user.cats.where(id: params[:id]).empty?
+        return true
+      else
+        return false
+      end
+    else
+      return false
     end
   end
 

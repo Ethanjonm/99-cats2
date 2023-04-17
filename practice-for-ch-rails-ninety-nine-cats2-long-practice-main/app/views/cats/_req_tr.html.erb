@@ -3,12 +3,16 @@
   <td><%= req.end_date %></td>
   <td>
     <% if req.pending? %>
-      <form action="<%= approve_cat_rental_request_url(req) %>" method="post">
-        <input type="submit" value="Approve">
-      </form>
-      <form action="<%= deny_cat_rental_request_url(req) %>" method="post">
-        <input type="submit" value="Deny">
-      </form>
+      <% if owner_logged_in? %>
+        <form action="<%= approve_cat_rental_request_url(req) %>" method="post">
+            <input type="submit" value="Approve">
+        </form>
+        <form action="<%= deny_cat_rental_request_url(req) %>" method="post">
+            <input type="submit" value="Deny">
+        </form>
+      <% else %>
+        PENDING
+      <% end %>
     <% else %>
       <%= req.status %>
     <% end %>

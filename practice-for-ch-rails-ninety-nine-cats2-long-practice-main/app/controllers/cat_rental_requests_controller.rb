@@ -1,4 +1,7 @@
 class CatRentalRequestsController < ApplicationController
+    before_action :owner_logged_in?, only: [:approve, :deny]
+    before_action :require_logged_in, only: [:new, :create]
+
   def approve
     current_cat_rental_request.approve!
     redirect_to cat_url(current_cat)
@@ -21,9 +24,21 @@ class CatRentalRequestsController < ApplicationController
 
   def new
     @rental_request = CatRentalRequest.new
-    # Grab the cat_id from params if it exists. 
+    # Grab the cat_id from params if it exists.
     # If it doesn't exist, :cat_id will still be nil.
-    @rental_request.cat_id = params[:cat_id] 
+    @rental_request.cat_id = params[:cat_id]
+  end
+
+  def owner_logged_in?
+    if current_user
+      if !@current_user.cats.where(id: current_cat.id).empty?
+        return true
+      else
+        redirect_to cat_url(current_cat.id)
+      end
+    else
+      redirect_to new_session_url
+    end
   end
 
   private
