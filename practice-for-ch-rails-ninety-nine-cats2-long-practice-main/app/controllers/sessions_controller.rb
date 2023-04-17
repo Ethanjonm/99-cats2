@@ -1,5 +1,7 @@
 class SessionsController < ApplicationController
 
+    before_action :require_logged_out, only: [:new, :create]
+
     def new
         @user = User.new
         render :new
@@ -11,7 +13,7 @@ class SessionsController < ApplicationController
         @user = User.find_by_credentials(username, password)
 
         if @user
-            session[:session_token] = @user.reset_session_token!
+            login!(@user)
             redirect_to cats_url
         else
             @user = User.new(username: username)
@@ -20,10 +22,11 @@ class SessionsController < ApplicationController
     end
 
     def destroy
-        if current_user 
+        if current_user
             @current_user.reset_session_token!
         end
         session[:session_token] = nil
+        redirect_to cats_url
     end
 
 end

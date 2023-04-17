@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
 
+    before_action :require_logged_out, only: [:new, :create]
+
     def new
         @user = User.new
         render :new
@@ -10,9 +12,9 @@ class UsersController < ApplicationController
         if @user.save
             redirect_to cats_url
         else
-            render :new 
+            render :new
         end
-        
+
 
     end
 

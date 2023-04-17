@@ -9,5 +9,21 @@ class ApplicationController < ActionController::Base
         !!current_user
     end
 
-    
+    def require_logged_out
+        if logged_in?
+            redirect_to cats_url
+        end
+    end
+
+    def require_logged_in
+        if !logged_in?
+            redirect_to new_session_url
+        end
+    end
+
+    def login!(user)
+        session[:session_token] = user.reset_session_token!
+    end
+
+
 end
