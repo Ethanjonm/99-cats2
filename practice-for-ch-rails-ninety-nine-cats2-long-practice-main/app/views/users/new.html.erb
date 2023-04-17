@@ -1,6 +1,16 @@
 <h2>Create User</h2>
 
-<form action="">
+<form action="<%= users_url %>" method="POST">
+    <label> Enter a username:
+    <input type="text" name="user[username]" value="<%= @user.username %>">
+    </label>
+    <br>
 
+    <label>Enter a password:
+    <input type="password" name="user[password]" value="">
+    </label>
+    <br>
+
+    <input type="submit" value="Create User">
 
 </form>
