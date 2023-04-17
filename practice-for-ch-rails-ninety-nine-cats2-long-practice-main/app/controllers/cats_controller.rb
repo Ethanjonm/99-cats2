@@ -2,6 +2,7 @@ class CatsController < ApplicationController
 
   before_action :require_logged_in, only: [:new, :create]
   before_action :owner_logged_in?, only: [:edit, :update]
+
   def index
     @cats = Cat.all
     render :index
@@ -19,7 +20,7 @@ class CatsController < ApplicationController
 
   def create
     @cat = Cat.new(cat_params)
-    @cat.owner_id = current_user
+    @cat.owner_id = current_user.id
 
     if @cat.save
       redirect_to cat_url(@cat)
@@ -46,7 +47,7 @@ class CatsController < ApplicationController
 
   def owner_logged_in?
     if current_user
-      if !@current_user.cats.where(id: params[:id]).nil?
+      if !@current_user.cats.where(id: params[:id]).empty?
         return true
       else
         redirect_to cat_url(params[:id])

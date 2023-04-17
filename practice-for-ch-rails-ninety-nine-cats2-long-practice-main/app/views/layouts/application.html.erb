@@ -15,15 +15,20 @@
     <nav class="main-nav">
       <h1><a href="<%= cats_url %>">99 Cats</a></h1>
       <% if logged_in?  %>
-      <%= current_user.username %>
-      <form action="<%= session_url %>" method="POST">
-      <input type="hidden" name="_method" value="DELETE">
-      <input type="submit" value="Log out">
-      </form>
+        <%= current_user.username %>
+        <form action="<%= session_url %>" method="POST">
+            <input type="hidden" name="_method" value="DELETE">
+            <input type="submit" value="Log out">
+        </form>
       <% else %>
-      <form action="<%= new_session_url %>" method="GET">
-      <input type="submit" value="Log in">
-      </form>
+        <div>
+            <form action="<%= new_session_url %>" method="GET">
+                <input type="submit" value="Log in">
+            </form>
+            <form action="<%= new_user_url %>" method="GET">
+                <input type="submit" value="Sign Up">
+            </form>
+        </div>
       <% end %>
     </nav>
     <main>
