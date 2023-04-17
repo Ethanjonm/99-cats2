@@ -20,7 +20,10 @@ class SessionsController < ApplicationController
     end
 
     def destroy
-
+        if current_user 
+            @current_user.reset_session_token!
+        end
+        session[:session_token] = nil
     end
 
 end
